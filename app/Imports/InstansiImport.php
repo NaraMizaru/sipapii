@@ -16,7 +16,11 @@ class InstansiImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return new Instansi([
-            'nama' => $row['nama'] ?? $row['Nama']
+            'nama' => $row['nama'] ?? $row['Nama'],
+            'alamat' => $row['alamat'] ?? $row['Alamat'],
+            'domisili' => $row['domisili'] ?? $row['Domisili'],
+            'latitude' => $row['latitude'] ?? $row['Latitude'],
+            'longitude' => $row['longitude'] ?? $row['Longitude'],
         ]);
     }
 }

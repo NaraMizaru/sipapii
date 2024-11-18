@@ -11,7 +11,7 @@
 
 @section('content')
     <section class="row">
-      @include('template.feedback')
+        @include('template.feedback')
 
         <div class="col-12">
             <div class="row">
@@ -138,11 +138,6 @@
                                         <td class="text-center">1</td>
                                         <td>Muhamad Hilal</td>
                                         <td>Universita Komputer Indonesia</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">2</td>
-                                        <td>Dea Novita</td>
-                                        <td>ATR/BPN Kota Sukabumi</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Kelola Instansi')
+@section('title', 'Kelola Tahun Ajar')
 
 @push('css')
     {{-- CSS Only For This Page --}}
@@ -19,12 +19,10 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h4 class="card-title">Daftar Instansi</h4>
+                        <h4 class="card-title">Daftar Tahun Ajar</h4>
                         <div class="float-right">
-                            <a href="{{ route('admin.pengelolaan.instansi.form') }}" class="btn btn-success"><i
-                                    class="fa-regular fa-add"></i></a>
-                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importInstansiModal"><i
-                                    class="fa-regular fa-file-import text-white"></i></button>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTahunAjar"><i
+                                    class="fa-regular fa-add"></i></button>
                         </div>
                     </div>
                 </div>
@@ -33,11 +31,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
-                                <th>Nama</th>
-                                <th>Alamat</th>
-                                <th>Domisili</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
+                                <th>Tahun Ajar</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -48,63 +42,19 @@
         </div>
     </section>
 
-    <div class="modal fade" id="importInstansiModal" tabindex="-1" role="dialog"
-        aria-labelledby="importInstansiModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-centered modal-dialog-scrollable"
-            role="document">
+    <div class="modal fade" id="addTahunAjar" tabindex="-1" role="dialog" aria-labelledby="addTahunAjarTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="importInstansiModalTitle">Import Data Instansi</h5>
+                    <h5 class="modal-title" id="addTahunAjarTitle">Tambah Tahun Ajar</h5>
                 </div>
-                <form action="{{ route('admin.pengelolaan.instansi.import') }}" method="POST"
-                    enctype="multipart/form-data">
+                <form action="{{ route('admin.pengelolaan.tahun-ajar.add') }}" method="POST">
                     <div class="modal-body">
                         @csrf
                         <div class="form-group">
-                            <label for="name" class="mb-2">File CSV | Excel</label>
-                            <input type="file" name="file" id="file" class="basic-filepond"
-                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-                        </div>
-                        <div class="form-group">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-block">
-                                    <label for="table">Contoh Table</label>
-                                    <p class="text-danger">*Domisili Wajib (Luar Kota/Dalam Kota)</p>
-                                    <p class="text-secondary">Donwload contoh di sebelah -> </p>
-                                </div>
-                                <a href="{{ asset('assets/import/Import Kelas (Example).xlsx') }}"
-                                    class="btn btn-danger float-right mb-2"><i class="fa-regular fa-download"></i></a>
-                            </div>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No</th>
-                                        <th>Nama</th>
-                                        <th>Alamat</th>
-                                        <th>Domisili</th>
-                                        <th>Latitude</th>
-                                        <th>Longitude</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>PT. Jerbee Indonesia</td>
-                                        <td>Jl. Suryalaya Timur IV No.20, Cijagra, Kec. Lengkong, Kota Bandung</td>
-                                        <td>Luar Kota</td>
-                                        <td>-6.94610824364657</td>
-                                        <td>107.62596100280193</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <input type="text" class="form-control" id="tahun_ajar" name="tahun_ajar"
+                                placeholder="Masukan Tahun Ajar (2024/2025)" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -112,7 +62,35 @@
                             <span>Batal</span>
                         </button>
                         <button type="submit" class="btn btn-success ms-1">
-                            <span>Import</span>
+                            <span>Tambah</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editTahunAjarModal" tabindex="-1" role="dialog" aria-labelledby="editTahunAjarModaTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTahunAjarModalTitle">Tambah Tahun Ajar</h5>
+                </div>
+                <form method="POST" id="editTahunAjarForm">
+                    <div class="modal-body">
+                        @csrf
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="tahun_ajar"
+                                placeholder="Masukan Tahun Ajar (2024/2025)" required id="edit-tahun-ajar">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-primary" data-bs-dismiss="modal">
+                            <span>Batal</span>
+                        </button>
+                        <button type="submit" class="btn btn-success ms-1">
+                            <span>Tambah</span>
                         </button>
                     </div>
                 </form>
@@ -137,9 +115,8 @@
                 responsive: true,
                 processing: true,
                 serverSide: true,
-                scrollX: true,
                 ajax: {
-                    url: "{{ route('admin.pengelolaan.instansi.data') }}",
+                    url: "{{ route('admin.pengelolaan.tahun-ajar.data') }}",
                     data: function(e) {
                         return e;
                     }
@@ -156,34 +133,15 @@
                         }
                     },
                     {
-                        data: 'nama',
+                        data: 'tahun_ajar',
                         orderable: true,
-                    },
-                    {
-                        data: 'alamat',
-                        orderable: true,
-                    },
-                    {
-                        data: 'domisili',
-                        orderable: true,
-                    },
-                    {
-                        data: 'latitude',
-                        orderable: false,
-                    },
-                    {
-                        data: 'longitude',
-                        orderable: false,
                     },
                     {
                         data: 'id',
                         orderable: false,
                         render: function(data, type, row, meta) {
-                            let editUrl = "{{ route('admin.pengelolaan.instansi.form', ':id') }}";
-                            editUrl = editUrl.replace(':id', data);
-
                             let editBtn =
-                                `<a href="${editUrl}" class="btn btn-primary"><i class="fa-regular fa-edit"></i></a>`;
+                                `<button onclick='edit("${data}")' class="btn btn-primary"><i class="fa-regular fa-edit"></i></button>`;
                             let deleteBtn =
                                 `<button onclick="confirmDelete('${row.id}')" class="btn btn-danger"><i class="fa-regular fa-trash"></i></button>`;
                             return `<div class="d-flex flex-row gap-2">${editBtn}${deleteBtn}</div>`;
@@ -199,19 +157,22 @@
                 }
             });
         });
-
-        FilePond.create(document.querySelector(".basic-filepond"), {
-            credits: null,
-            allowImagePreview: false,
-            allowMultiple: false,
-            allowFileEncode: false,
-            required: true,
-            storeAsFile: true,
-        })
     </script>
     <script>
+        const edit = (id) => {
+            $.getJSON(`${window.location.origin}/admin/pengelolaan/tahun-ajar/data/${id}`, (data) => {
+                const updateUrl = `{{ route('admin.pengelolaan.tahun-ajar.edit', ':id') }}`
+
+                $('#editTahunAjarForm').attr('action', updateUrl.replace(':id', id))
+                $('#edit-tahun-ajar').val(data.tahun_ajar);
+
+                const myModal = new bootstrap.Modal(document.getElementById('editTahunAjarModal'));
+                myModal.show();
+            })
+        }
+
         const confirmDelete = (id) => {
-            const deleteUrl = "{{ route('admin.pengelolaan.instansi.delete', ':id') }}"
+            const deleteUrl = "{{ route('admin.pengelolaan.tahun-ajar.delete', ':id') }}"
 
             Swal.fire({
                 title: 'Apakah Anda yakin?',
@@ -223,11 +184,11 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = deleteUrl.replace(':id', id);
-                    Swal.fire("Success, Kelas berhasil dihapus!", {
+                    Swal.fire("Success, Tahun ajar berhasil dihapus!", {
                         icon: "success",
                     });
                 } else {
-                    Swal.fire("Penghapusan kelas dibatalkan!");
+                    Swal.fire("Penghapusan tahun ajar dibatalkan!");
                 }
             });
 

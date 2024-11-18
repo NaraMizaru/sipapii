@@ -17,7 +17,7 @@
 
                 <li class="sidebar-item {{ @$menu_type == 'dashboard' ? 'active' : '' }}">
                     <a href="{{ route('admin.dashboard') }}" class="sidebar-link">
-                        <i class="bi bi-grid-fill"></i>
+                        <i class="fa-regular fa-grid-2"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
@@ -26,35 +26,49 @@
 
                 <li class="sidebar-item {{ @$menu_type == 'pengelolaan-kelas' ? 'active' : '' }}">
                     <a href="{{ route('admin.pengelolaan.kelas') }}" class="sidebar-link">
-                        <i class="bi bi-grid-fill"></i>
+                        <i class="fa-regular fa-school"></i>
                         <span>Kelola Kelas</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item {{ @$menu_type == 'pengelolaan-instansi' ? 'active' : '' }}">
                     <a href="{{ route('admin.pengelolaan.instansi') }}" class="sidebar-link">
-                        <i class="bi bi-grid-fill"></i>
+                        <i class="fa-regular fa-building"></i>
                         <span>Kelola Instansi</span>
                     </a>
                 </li>
 
-                <li class="sidebar-title">Menu</li>
+                <li class="sidebar-item {{ @$menu_type == 'pengelolaan-tahun-ajar' ? 'active' : '' }}">
+                    <a href="{{ route('admin.pengelolaan.tahun-ajar') }}" class="sidebar-link">
+                        <i class="fa-regular fa-calendar-days"></i>
+                        <span>Kelola Tahun Ajar</span>
+                    </a>
+                </li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-title">Data</li>
+
+                <li class="sidebar-item has-sub {{ @$menu_type == 'siswa' ? 'active' : '' }}">
                     <a href="#" class="sidebar-link">
-                        <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                        <i class="fa-regular fa-graduation-cap"></i>
                         <span>Siswa</span>
                     </a>
 
                     <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="table-datatable.html" class="submenu-link">Akun Siswa</a>
+                        <li class="submenu-item {{ @$submenu_type == 'siswa-data' ? 'active' : '' }}">
+                            <a href="{{ route('admin.siswa') }}" class="submenu-link">Data Siswa</a>
                         </li>
 
                         <li class="submenu-item">
                             <a href="table-datatable-jquery.html" class="submenu-link">Nilai Siswa</a>
                         </li>
                     </ul>
+                </li>
+
+                <li class="sidebar-item {{ @$menu_type == 'guru-mapel-pembimbing' ? 'active' : '' }}">
+                    <a href="{{ route('admin.guru') }}" class="sidebar-link">
+                        <i class="fa-regular fa-chalkboard-user"></i>
+                        <span>Guru Mapel PKL & Pembimbing</span>
+                    </a>
                 </li>
             </ul>
         </div>

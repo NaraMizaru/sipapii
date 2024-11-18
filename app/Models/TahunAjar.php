@@ -5,16 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
-class Kelas extends Model
+class TahunAjar extends Model
 {
     use HasUuids;
 
-    protected $fillable = [
-        'nama',
-    ];
-
     public function siswa()
     {
-        return $this->hasMany(Siswa::class, 'kelas_id', 'id');
+        return $this->hasMany(Siswa::class, 'tahun_ajar_id', 'id');
     }
 }

@@ -84,7 +84,7 @@ class AdminKelasController extends Controller
         $kelas->nama = $request->nama;
         $kelas->save();
 
-        return redirect()->back()->with('success', 'Kelas berhasil ditambahkan');
+        return redirect()->back()->with('success', 'Data kelas berhasil ditambahkan');
     }
 
     public function editKelas(Request $request, $id)
@@ -101,7 +101,7 @@ class AdminKelasController extends Controller
         $kelas->nama = $request->nama;
         $kelas->save();
 
-        return redirect()->back()->with('success', 'Kelas berhasil diubah');
+        return redirect()->back()->with('success', 'Data kelas berhasil diubah');
     }
 
     public function deleteKelas($id)
@@ -109,7 +109,7 @@ class AdminKelasController extends Controller
         $kelas = Kelas::find($id);
         $kelas->delete();
 
-        return redirect()->back()->with('success', 'Kelas berhasil dihapus');
+        return redirect()->back()->with('success', 'Data kelas berhasil dihapus');
     }
 
     public function importKelas(Request $request)

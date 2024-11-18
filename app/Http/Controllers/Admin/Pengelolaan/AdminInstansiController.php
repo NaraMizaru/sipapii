@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin\Pengelolaan;
 
 use App\Http\Controllers\Controller;
+use App\Imports\InstansiImport;
 use App\Models\Instansi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminInstansiController extends Controller
 {
@@ -102,5 +104,19 @@ class AdminInstansiController extends Controller
         }
 
         return redirect()->route('admin.pengelolaan.instansi')->with('success', 'Data instansi berhasil dihapus');
+    }
+
+    public function importInstansi(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xls,xlsx,csv'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+        }
+
+        Excel::import(new InstansiImport(), $request->file('file'));
+        return redirect()->back()->with('success', 'Data instansi berhasil diimport');
     }
 }

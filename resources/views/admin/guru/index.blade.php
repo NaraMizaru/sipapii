@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Kelola Instansi')
+@section('title', 'Data Guru Mapel PKL & Pembimbing')
 
 @push('css')
     {{-- CSS Only For This Page --}}
@@ -8,7 +8,6 @@
     <link href="{{ asset('assets/extensions/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css') }}"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/extensions/filepond/filepond.css') }}">
 @endpush
 
 @section('content')
@@ -19,12 +18,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h4 class="card-title">Daftar Instansi</h4>
+                        <h4 class="card-title">Daftar Guru Mapel PKL & Pembimbing</h4>
                         <div class="float-right">
-                            <a href="{{ route('admin.pengelolaan.instansi.form') }}" class="btn btn-success"><i
-                                    class="fa-regular fa-add"></i></a>
-                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importInstansiModal"><i
-                                    class="fa-regular fa-file-import text-white"></i></button>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addGuruModal"><i
+                                    class="fa-regular fa-add"></i></button>
+                            <button class="btn btn-warning"><i class="fa-regular fa-file-import text-white"></i></button>
                         </div>
                     </div>
                 </div>
@@ -33,11 +31,9 @@
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
+                                {{-- <th>Foto Profile</th> --}}
                                 <th>Nama</th>
-                                <th>Alamat</th>
-                                <th>Domisili</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
+                                <th>Nomor Whatsapp</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -48,63 +44,25 @@
         </div>
     </section>
 
-    <div class="modal fade" id="importInstansiModal" tabindex="-1" role="dialog"
-        aria-labelledby="importInstansiModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-centered modal-dialog-scrollable"
-            role="document">
+    <div class="modal fade" id="addGuruModal" tabindex="-1" role="dialog" aria-labelledby="addGuruModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="importInstansiModalTitle">Import Data Instansi</h5>
+                    <h5 class="modal-title" id="addGuruModalTitle">Tambah Guru</h5>
                 </div>
-                <form action="{{ route('admin.pengelolaan.instansi.import') }}" method="POST"
-                    enctype="multipart/form-data">
+                <form action="{{ route('admin.guru.add') }}" method="POST">
                     <div class="modal-body">
                         @csrf
                         <div class="form-group">
-                            <label for="name" class="mb-2">File CSV | Excel</label>
-                            <input type="file" name="file" id="file" class="basic-filepond"
-                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                            <label for="nama_lengkap">Nama Guru</label>
+                            <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap"
+                                placeholder="Masukan Nama Guru" required>
                         </div>
                         <div class="form-group">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-block">
-                                    <label for="table">Contoh Table</label>
-                                    <p class="text-danger">*Domisili Wajib (Luar Kota/Dalam Kota)</p>
-                                    <p class="text-secondary">Donwload contoh di sebelah -> </p>
-                                </div>
-                                <a href="{{ asset('assets/import/Import Kelas (Example).xlsx') }}"
-                                    class="btn btn-danger float-right mb-2"><i class="fa-regular fa-download"></i></a>
-                            </div>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No</th>
-                                        <th>Nama</th>
-                                        <th>Alamat</th>
-                                        <th>Domisili</th>
-                                        <th>Latitude</th>
-                                        <th>Longitude</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>PT. Jerbee Indonesia</td>
-                                        <td>Jl. Suryalaya Timur IV No.20, Cijagra, Kec. Lengkong, Kota Bandung</td>
-                                        <td>Luar Kota</td>
-                                        <td>-6.94610824364657</td>
-                                        <td>107.62596100280193</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <label for="nomor-wa">Nomor Whatsapp</label>
+                            <input type="text" class="form-control" id="nomor_wa" name="nomor_wa"
+                                placeholder="Masukan Nomor Whatsapp" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -112,7 +70,7 @@
                             <span>Batal</span>
                         </button>
                         <button type="submit" class="btn btn-success ms-1">
-                            <span>Import</span>
+                            <span>Tambah</span>
                         </button>
                     </div>
                 </form>
@@ -124,13 +82,11 @@
 
 @push('js')
     {{-- JS Only For This Page --}}
-
     <script src="{{ asset('assets/extensions/datatables.net-responsive-bs5/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/extensions/datatables.net-responsive-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/extensions/datatables.net-responsive-bs5/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('assets/extensions/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('assets/extensions/filepond/filepond.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#table-1').DataTable({
@@ -139,7 +95,7 @@
                 serverSide: true,
                 scrollX: true,
                 ajax: {
-                    url: "{{ route('admin.pengelolaan.instansi.data') }}",
+                    url: "{{ route('admin.guru.data') }}",
                     data: function(e) {
                         return e;
                     }
@@ -156,37 +112,24 @@
                         }
                     },
                     {
-                        data: 'nama',
+                        data: 'nama_lengkap',
                         orderable: true,
                     },
                     {
-                        data: 'alamat',
+                        data: 'guru.nomor_wa',
                         orderable: true,
-                    },
-                    {
-                        data: 'domisili',
-                        orderable: true,
-                    },
-                    {
-                        data: 'latitude',
-                        orderable: false,
-                    },
-                    {
-                        data: 'longitude',
-                        orderable: false,
                     },
                     {
                         data: 'id',
                         orderable: false,
                         render: function(data, type, row, meta) {
-                            let editUrl = "{{ route('admin.pengelolaan.instansi.form', ':id') }}";
-                            editUrl = editUrl.replace(':id', data);
-
+                            let showBtn =
+                                `<button class="btn btn-warning text-white"><i class="fa-regular fa-eye"></i></button>`;
                             let editBtn =
-                                `<a href="${editUrl}" class="btn btn-primary"><i class="fa-regular fa-edit"></i></a>`;
+                                `<button class="btn btn-primary"><i class="fa-regular fa-edit"></i></button>`;
                             let deleteBtn =
                                 `<button onclick="confirmDelete('${row.id}')" class="btn btn-danger"><i class="fa-regular fa-trash"></i></button>`;
-                            return `<div class="d-flex flex-row gap-2">${editBtn}${deleteBtn}</div>`;
+                            return `<div class="d-flex flex-row gap-2">${showBtn}${editBtn}${deleteBtn}</div>`;
                         }
                     }
                 ],
@@ -199,19 +142,10 @@
                 }
             });
         });
-
-        FilePond.create(document.querySelector(".basic-filepond"), {
-            credits: null,
-            allowImagePreview: false,
-            allowMultiple: false,
-            allowFileEncode: false,
-            required: true,
-            storeAsFile: true,
-        })
     </script>
     <script>
         const confirmDelete = (id) => {
-            const deleteUrl = "{{ route('admin.pengelolaan.instansi.delete', ':id') }}"
+            const deleteUrl = "{{ route('admin.siswa.delete', ':id') }}"
 
             Swal.fire({
                 title: 'Apakah Anda yakin?',

@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\Guru\AdminGuruController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminInstansiController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminKelasController;
+use App\Http\Controllers\Admin\Pengelolaan\AdminTahunAjarController;
+use App\Http\Controllers\Admin\Siswa\AdminDataSiswaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,7 +46,37 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
                 Route::post('/form/{id?}', 'store')->name('admin.pengelolaan.instansi.form.store');
                 Route::get('/data', 'data')->name('admin.pengelolaan.instansi.data');
                 Route::get('/{id}/delete', 'delete')->name('admin.pengelolaan.instansi.delete');
+                Route::post('/import', 'importInstansi')->name('admin.pengelolaan.instansi.import');
             });
+        });
+
+        Route::controller(AdminTahunAjarController::class)->group(function () {
+            Route::prefix('/tahun-ajar')->group(function () {
+                Route::get('/', 'index')->name('admin.pengelolaan.tahun-ajar');
+                Route::post('/add', 'addTahunAjar')->name('admin.pengelolaan.tahun-ajar.add');
+                Route::post('/{id}/edit', 'editTahunAjar')->name('admin.pengelolaan.tahun-ajar.edit');
+                Route::get('/{id}/delete', 'deleteTahunAjar')->name('admin.pengelolaan.tahun-ajar.delete');
+                Route::get('/data', 'data')->name('admin.pengelolaan.tahun-ajar.data');
+                Route::get('/data/{id}', 'dataById')->name('admin.pengelolaan.tahun-ajar.data.id');
+            });
+        });
+    });
+
+    Route::prefix('/siswa')->group(function () {
+        Route::controller(AdminDataSiswaController::class)->group(function () {
+            Route::get('/', 'index')->name('admin.siswa');
+            Route::get('/form/{id?}', 'form')->name('admin.siswa.form');
+            Route::post('/form/{id?}', 'store')->name('admin.siswa.form.store');
+            Route::get('/data', 'data')->name('admin.siswa.data');
+            Route::get('/{id}/delete', 'delete')->name('admin.siswa.delete');
+        });
+    });
+
+    Route::prefix('/guru')->group(function () {
+        Route::controller(AdminGuruController::class)->group(function () {
+            Route::get('/', 'index')->name('admin.guru');
+            Route::post('/add', 'addGuru')->name('admin.guru.add');
+            Route::get('/data', 'data')->name('admin.guru.data');
         });
     });
 });

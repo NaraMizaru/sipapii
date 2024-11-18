@@ -79,7 +79,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="editKelasModalTitle">Edit Kelas</h5>
                 </div>
-                <form action="{{ route('admin.pengelolaan.kelas.add') }}" method="POST" id="formKelasForm">
+                <form method="POST" id="editKelasForm">
                     <div class="modal-body">
                         @csrf
                         <div class="form-group">
@@ -107,7 +107,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="importKelasModalTitle">Import Data Kelas</h5>
                 </div>
-                <form action="{{ route('admin.pengelolaan.kelas.import') }}" method="POST" id="editKelasForm"
+                <form action="{{ route('admin.pengelolaan.kelas.import') }}" method="POST"
                     enctype="multipart/form-data">
                     <div class="modal-body">
                         @csrf
@@ -128,7 +128,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
+                                        <t class="text-center">No</t>
                                         <th>Nama</th>
                                     </tr>
                                 </thead>

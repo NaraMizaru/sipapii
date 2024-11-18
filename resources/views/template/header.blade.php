@@ -42,7 +42,7 @@
             <div class="dropdown">
                 <a class="dropdown-toggle me-1" type="button" id="dropdownProfile" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                    <span class="mr-2 d-none d-lg-inline small">Administrator</span>
+                    <span class="mr-2 d-none d-lg-inline small">{{ auth()->user()->nama_lengkap }}</span>
                     <div class="avatar avatar-md">
                         <img src="{{ asset('assets/static/images/faces/1.jpg') }}" alt="">
                         <div class="avatar-status bg-success"></div>

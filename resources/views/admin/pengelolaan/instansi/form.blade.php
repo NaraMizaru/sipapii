@@ -9,8 +9,8 @@
 @endpush
 
 @php
-    $defaultLat = -6.9346469225857446;
-    $defaultLon = 106.92669759393235;
+    $defaultLat = -6.93484106751055;
+    $defaultLon = 106.92595802590458;
 @endphp
 
 @section('content')
@@ -47,8 +47,8 @@
                                     <div class="form-group">
                                         <label>Domisili</label>
                                         <select class="choices form-select" name="domisili" required>
-                                            <option value="Dalam Kota" @selected(old('domisili', @$instansi->domisili == 'Dalam Kota'))>Dalam Kota</option>
-                                            <option value="Luar Kota" @selected(old('domisili', @$instansi->domisili == 'Luar Kota'))>Luar Kota</option>
+                                            <option value="Dalam Kota" @selected(old('domisili', @$instansi->domisili) == 'Dalam Kota')>Dalam Kota</option>
+                                            <option value="Luar Kota" @selected(old('domisili', @$instansi->domisili) == 'Luar Kota')>Luar Kota</option>
                                         </select>
                                     </div>
                                 </div>
@@ -112,8 +112,8 @@
         }
     </script>
     <script>
-        var defaultLat = -6.9346469225857446;
-        var defaultLon = 106.92669759393235;
+        var defaultLat = -6.934838404922678;
+        var defaultLon = 106.92595936700863;
 
         $(document).ready(function() {
             var lat = parseFloat($('#latitude').val()) || defaultLat;
