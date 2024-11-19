@@ -151,8 +151,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="importGuruModalTitle">Import Data Kelas</h5>
                 </div>
-                <form action="{{ route('admin.guru.import') }}" method="POST"
-                    enctype="multipart/form-data">
+                <form action="{{ route('admin.guru.import') }}" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         @csrf
                         <div class="form-group">
@@ -170,27 +169,29 @@
                                 <a href="{{ asset('assets/import/Import Kelas (Example).xlsx') }}"
                                     class="btn btn-danger float-right mb-2"><i class="fa-regular fa-download"></i></a>
                             </div>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No</th>
-                                        <th>Nama_Lengkap</th>
-                                        <th>Nomor_Whatsapp</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>John Doe</td>
-                                        <td>08123123123</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th>Nama_Lengkap</th>
+                                            <th>Nomor_Whatsapp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">1</td>
+                                            <td>John Doe</td>
+                                            <td>08123123123</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -85,7 +85,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="importSiswaModalTitle">Import Data Kelas</h5>
+                    <h5 class="modal-title" id="importSiswaModalTitle">Import Data Siswa</h5>
                 </div>
                 <form action="{{ route('admin.siswa.import') }}" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
@@ -128,30 +128,32 @@
                                 <a href="{{ asset('assets/import/Import Kelas (Example).xlsx') }}"
                                     class="btn btn-danger float-right mb-2"><i class="fa-regular fa-download"></i></a>
                             </div>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No</th>
-                                        <th>NIS</th>
-                                        <th>Nama_Lengkap</th>
-                                        <th>Jenis_Kelamin</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>12209322</td>
-                                        <td>Muhamad Hilal</td>
-                                        <td>L</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th>NIS</th>
+                                            <th>Nama_Lengkap</th>
+                                            <th>Jenis_Kelamin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">1</td>
+                                            <td>12209322</td>
+                                            <td>Muhamad Hilal</td>
+                                            <td>L</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

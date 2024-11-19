@@ -76,36 +76,38 @@
                                 <a href="{{ asset('assets/import/Import Kelas (Example).xlsx') }}"
                                     class="btn btn-danger float-right mb-2"><i class="fa-regular fa-download"></i></a>
                             </div>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No</th>
-                                        <th>Nama</th>
-                                        <th>Alamat</th>
-                                        <th>Domisili</th>
-                                        <th>Latitude</th>
-                                        <th>Longitude</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>PT. Jerbee Indonesia</td>
-                                        <td>Jl. Suryalaya Timur IV No.20, Cijagra, Kec. Lengkong, Kota Bandung</td>
-                                        <td>Luar Kota</td>
-                                        <td>-6.94610824364657</td>
-                                        <td>107.62596100280193</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                        <td>...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th>Nama</th>
+                                            <th>Alamat</th>
+                                            <th>Domisili</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">1</td>
+                                            <td>PT. Jerbee Indonesia</td>
+                                            <td>Jl. Suryalaya Timur IV No.20, Cijagra, Kec. Lengkong, Kota Bandung</td>
+                                            <td>Luar Kota</td>
+                                            <td>-6.94610824364657</td>
+                                            <td>107.62596100280193</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
