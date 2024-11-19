@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -25,18 +26,19 @@ class AuthController extends Controller
             return redirect()->back()->withErrors($validator)->withInput($request->all());
         }
 
-        $credentials = $request->only('username', 'password');
-        $remember = $request->has('remember');
+        $user = User::where('username', $request->username)->first();
 
-        if (Auth::attempt($credentials, $remember)) {
-            $user = Auth::user();
+        if ($user) {
             if ($user->role == 'admin') {
-                return redirect()->route('admin.dashboard');
+                if (Auth::attempt($request->only('username', 'password'), $request->has('remember'))) {
+                    return redirect()->route('admin.dashboard');
+                } else {
+                    return redirect()->back()->with('error', 'Username atau password salah');
+                }
             } else {
-                // return redirect()->back()->with('error', 'Username atau Password salah');
+                Auth::login($user, $request->has('remember'));
+                return redirect()->route('');
             }
-        } else {
-            return redirect()->back()->with('error', 'Username atau Password salah');
         }
     }
 

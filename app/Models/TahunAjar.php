@@ -9,6 +9,11 @@ class TahunAjar extends Model
 {
     use HasUuids;
 
+    protected $fillable = [
+        'id',
+        'tahun_ajar',
+    ];
+
     public function siswa()
     {
         return $this->hasMany(Siswa::class, 'tahun_ajar_id', 'id');

@@ -107,8 +107,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="importKelasModalTitle">Import Data Kelas</h5>
                 </div>
-                <form action="{{ route('admin.pengelolaan.kelas.import') }}" method="POST"
-                    enctype="multipart/form-data">
+                <form action="{{ route('admin.pengelolaan.kelas.import') }}" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         @csrf
                         <div class="form-group">
@@ -120,7 +119,8 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="d-block">
                                     <label for="table">Contoh Table</label>
-                                    <p class="text-secondary">Donwload contoh di sebelah -> </p>
+                                    <span class="text-danger">*Header jangan di hapus</span>
+                                    <p class="text-secondary">Donwload contoh di sebelah -></p>
                                 </div>
                                 <a href="{{ asset('assets/import/Import Kelas (Example).xlsx') }}"
                                     class="btn btn-danger float-right mb-2"><i class="fa-regular fa-download"></i></a>
@@ -128,7 +128,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <t class="text-center">No</t>
+                                        <th class="text-center">No</th>
                                         <th>Nama</th>
                                     </tr>
                                 </thead>

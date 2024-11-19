@@ -65,7 +65,7 @@ class AdminKelasController extends Controller
 
     public function dataById($id)
     {
-        $kelas = Kelas::find($id)->first();
+        $kelas = Kelas::find($id);
 
         return response()->json($kelas);
     }

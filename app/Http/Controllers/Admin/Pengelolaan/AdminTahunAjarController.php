@@ -63,7 +63,7 @@ class AdminTahunAjarController extends Controller
 
     public function dataById($id)
     {
-        $tahunAjar = TahunAjar::find($id)->first();
+        $tahunAjar = TahunAjar::find($id);
 
         return response()->json($tahunAjar);
     }

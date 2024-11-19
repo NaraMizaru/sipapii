@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Siswa;
 
 use App\Http\Controllers\Controller;
+use App\Imports\SiswaImport;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\TahunAjar;
@@ -10,12 +11,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminDataSiswaController extends Controller
 {
     public function index()
     {
-        return view('admin.siswa.data-siswa.index', [], ['menu_type' => 'siswa', 'submenu_type' => 'siswa-data']);
+        $data['kelas'] = Kelas::orderBy('nama', 'ASC')->get();
+        $data['tahunAjar'] = TahunAjar::orderBy('tahun_ajar', 'ASC')->get();
+
+        return view('admin.siswa.data-siswa.index', [], ['menu_type' => 'siswa', 'submenu_type' => 'siswa-data'])->with($data);
     }
 
     public function form($id = null)
@@ -106,6 +111,13 @@ class AdminDataSiswaController extends Controller
         return response()->json($response);
     }
 
+    public function dataById($id)
+    {
+        $siswa = User::where('id', $id)->where('role', 'siswa')->first();
+
+        return response()->json($siswa);
+    }
+
     public function delete($id)
     {
         $user = User::find($id);
@@ -115,5 +127,26 @@ class AdminDataSiswaController extends Controller
         }
 
         return redirect()->route('admin.siswa')->with('success', 'Data siswa berhasil dihapus');
+    }
+
+    public function importSiswa(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xls,xlsx',
+            'kelas_id' => 'required',
+            'tahun_ajar_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all());
+        }
+
+        // dd($request->all());
+
+        $kelasId = $request->kelas_id;
+        $tahunAjaranId = $request->tahun_ajar_id;
+
+        Excel::import(new SiswaImport($kelasId, $tahunAjaranId), $request->file('file'));
+        return redirect()->route('admin.siswa')->with('success', 'Data siswa berhasil diimport');
     }
 }

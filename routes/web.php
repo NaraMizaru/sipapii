@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Pengelolaan\AdminInstansiController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminKelasController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminTahunAjarController;
 use App\Http\Controllers\Admin\Siswa\AdminDataSiswaController;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -68,7 +69,9 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
             Route::get('/form/{id?}', 'form')->name('admin.siswa.form');
             Route::post('/form/{id?}', 'store')->name('admin.siswa.form.store');
             Route::get('/data', 'data')->name('admin.siswa.data');
+            Route::get('/data/{id}', 'dataById')->name('admin.siswa.data.id');
             Route::get('/{id}/delete', 'delete')->name('admin.siswa.delete');
+            Route::post('/import', 'importSiswa')->name('admin.siswa.import');
         });
     });
 
@@ -76,7 +79,17 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
         Route::controller(AdminGuruController::class)->group(function () {
             Route::get('/', 'index')->name('admin.guru');
             Route::post('/add', 'addGuru')->name('admin.guru.add');
+            Route::post('/{id}/edit', 'editGuru')->name('admin.guru.edit');
+            Route::get('/{id}/delete', 'deleteGuru')->name('admin.guru.delete');
             Route::get('/data', 'data')->name('admin.guru.data');
+            Route::get('/data/{id}', 'dataById')->name('admin.guru.data.id');
+            Route::post('/import', 'importGuru')->name('admin.guru.import');
         });
+    });
+});
+
+Route::get('/test/mail', function() {
+    Mail::raw('ini test mail dari sipapii@smkn2smi.sch.id', function($message) {
+        $message->to('hilal.muhammad0807@gmail.com')->subject('Test Mail');
     });
 });

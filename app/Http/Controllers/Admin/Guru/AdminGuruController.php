@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\Guru;
 
 use App\Http\Controllers\Controller;
+use App\Imports\GuruImport;
 use App\Models\Guru;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminGuruController extends Controller
 {
@@ -15,48 +17,6 @@ class AdminGuruController extends Controller
     {
         return view('admin.guru.index', [], ['menu_type' => 'guru-mapel-pembimbing']);
     }
-
-    public function addGuru(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'nama_lengkap' => 'required',
-            'nomor_wa' => 'required|digits_between:10,15',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput($request->all());
-        }
-
-        $namaDepan = strtoupper(substr($request->nama_lengkap, 0, 3));
-        $nomorWa = preg_replace('/\D/', '', $request->nomor_wa);
-        $digitTerakhirWa = substr($nomorWa, -2);
-        $username = $namaDepan . $digitTerakhirWa;
-
-        $counter = 1;
-        $originalUsername = $username;
-        while (User::where('username', $username)->exists()) {
-            $username = $originalUsername . $counter;
-            $counter++;
-        }
-
-        $user = new User();
-        $user->nama_lengkap = $request->nama_lengkap;
-        $user->username = $username;
-        $user->password = Str::random(8);
-        $user->role = 'guru';
-        $user->save();
-
-        if ($user) {
-            $guru = new Guru();
-            $guru->user_id = $user->id;
-            $guru->nomor_wa = $request->nomor_wa;
-            $guru->save();
-        }
-
-        return redirect()->route('admin.guru')->with('success', 'Data guru berhasil disimpan');
-    }
-
-
 
     public function data(Request $request)
     {
@@ -101,5 +61,101 @@ class AdminGuruController extends Controller
         ];
 
         return response()->json($response);
+    }
+
+    public function dataById($id)
+    {
+        $guru = User::where('id', $id)->with('guru')->first();
+
+        return response()->json($guru);
+    }
+
+    public function addGuru(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_lengkap' => 'required',
+            'nomor_wa' => 'required|digits_between:10,15',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all());
+        }
+
+        $namaDepan = strtoupper(substr($request->nama_lengkap, 0, 3));
+        $nomorWa = preg_replace('/\D/', '', $request->nomor_wa);
+        $digitTerakhirWa = substr($nomorWa, -2);
+        $username = $namaDepan . $digitTerakhirWa;
+
+        $counter = 1;
+        $originalUsername = $username;
+        while (User::where('username', $username)->exists()) {
+            $username = $originalUsername . $counter;
+            $counter++;
+        }
+
+        $user = new User();
+        $user->nama_lengkap = $request->nama_lengkap;
+        $user->username = $username;
+        $user->password = Str::random(8);
+        $user->role = 'guru';
+        $user->save();
+
+        if ($user) {
+            $guru = new Guru();
+            $guru->user_id = $user->id;
+            $guru->nomor_wa = $request->nomor_wa;
+            $guru->save();
+        }
+
+        return redirect()->route('admin.guru')->with('success', 'Data guru berhasil disimpan');
+    }
+
+    public function editGuru(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_lengkap' => 'required',
+            'nomor_wa' => 'required|digits_between:10,15',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all());
+        }
+
+        $user = User::find($request->id);
+        $user->nama_lengkap = $request->nama_lengkap;
+        $user->save();
+
+        if ($user) {
+            $guru = Guru::where('user_id', $request->id)->first();
+            $guru->nomor_wa = $request->nomor_wa;
+            $guru->save();
+        }
+
+        return redirect()->route('admin.guru')->with('success', 'Data guru berhasil diubah');
+    }
+
+    public function deleteGuru($id)
+    {
+        $user = User::find($id);
+
+        if ($user) {
+            $user->delete();
+        }
+
+        return redirect()->route('admin.guru')->with('success', 'Data guru berhasil dihapus');
+    }
+
+    public function importGuru(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all());
+        }
+
+        Excel::import(new GuruImport(), $request->file('file'));
+        return redirect()->route('admin.guru')->with('success', 'Data guru berhasil diimport');
     }
 }

@@ -10,6 +10,7 @@ class Kelas extends Model
     use HasUuids;
 
     protected $fillable = [
+        'id',
         'nama',
     ];
 

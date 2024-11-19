@@ -69,6 +69,7 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="d-block">
                                     <label for="table">Contoh Table</label>
+                                    <span class="text-danger">*Header jangan di hapus</span>
                                     <p class="text-danger">*Domisili Wajib (Luar Kota/Dalam Kota)</p>
                                     <p class="text-secondary">Donwload contoh di sebelah -> </p>
                                 </div>

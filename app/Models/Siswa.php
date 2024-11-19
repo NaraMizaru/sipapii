@@ -10,6 +10,7 @@ class Siswa extends Model
     use HasUuids;
 
     protected $fillable = [
+        'id',
         'user_id',
         'nis',
         'jenis_kelamin',

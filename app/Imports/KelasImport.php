@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Kelas;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Str;
 
 class KelasImport implements ToModel, WithHeadingRow
 {
@@ -15,7 +16,7 @@ class KelasImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        // dd($row[1]);
+        // dd($row);
 
         return new Kelas([
             'nama' => $row['nama'] ?? $row['Nama'],
