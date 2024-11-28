@@ -7,11 +7,12 @@ use App\Http\Controllers\Admin\Pengelolaan\AdminInstansiController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminKelasController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminTahunAjarController;
 use App\Http\Controllers\Admin\Siswa\AdminDataSiswaController;
+use App\Http\Controllers\Siswa\SiswaDashboardController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('siswa.dashboard');
+    return view('welcome');
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -88,8 +89,14 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
     });
 });
 
-Route::get('/test/mail', function() {
-    Mail::raw('ini test mail dari sipapii@smkn2smi.sch.id', function($message) {
+Route::prefix('/siswa')->middleware('auth')->group(function () {
+    Route::controller(SiswaDashboardController::class)->group(function () {
+        Route::get('/dashboard', 'index')->name('siswa.dashboard');
+    });
+});
+
+Route::get('/test/mail', function () {
+    Mail::raw('ini test mail dari sipapii@smkn2smi.sch.id', function ($message) {
         $message->to('hilal.muhammad0807@gmail.com')->subject('Test Mail');
     });
 });

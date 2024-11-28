@@ -116,8 +116,8 @@
         var defaultLon = 106.92595936700863;
 
         $(document).ready(function() {
-            var lat = parseFloat($('#latitude').val()) || defaultLat;
-            var lon = parseFloat($('#longitude').val()) || defaultLon;
+            var lat = $('#latitude').val() || defaultLat;
+            var lon = $('#longitude').val() || defaultLon;
 
             var map = L.map('map').setView([lat, lon], 13);
 
