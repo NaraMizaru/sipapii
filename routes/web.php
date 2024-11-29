@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Pengelolaan\AdminInstansiController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminKelasController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminTahunAjarController;
 use App\Http\Controllers\Admin\Siswa\AdminDataSiswaController;
+use App\Http\Controllers\Siswa\SiswaAbsenController;
 use App\Http\Controllers\Siswa\SiswaDashboardController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -92,6 +93,12 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
 Route::prefix('/siswa')->middleware('auth')->group(function () {
     Route::controller(SiswaDashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('siswa.dashboard');
+    });
+
+    Route::controller(SiswaAbsenController::class)->group(function () {
+        Route::prefix('absen')->group(function () {
+            Route::get('/', 'index')->name('siswa.absen');
+        });
     });
 });
 

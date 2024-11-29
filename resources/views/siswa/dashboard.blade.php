@@ -130,7 +130,7 @@
         </div>
     </div>
 
-    <div class="px-4" style="margin-bottom: 5rem">
+    <div class="px-4">
         <div class="mt-3">
             <h5>Data Jurnal</h5>
         </div>
@@ -170,6 +170,8 @@
             </div>
         </div>
     </div>
+
+    <div style="margin-bottom: 5rem;"></div>
 
 @endsection
 

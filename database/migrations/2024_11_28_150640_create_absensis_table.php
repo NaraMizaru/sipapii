@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absensis', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->timestamps();
-        });
+        // Schema::create('absensis', function (Blueprint $table) {
+        //     $table->uuid('id')->primary();
+        //     $table->timestamps();
+        // });
     }
 
     /**
