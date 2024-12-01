@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\Guru\AdminGuruController;
+use App\Http\Controllers\Admin\Pengelolaan\AdminPenempatanController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminInstansiController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminKelasController;
+use App\Http\Controllers\Admin\Pengelolaan\AdminPembimbinganController;
 use App\Http\Controllers\Admin\Pengelolaan\AdminTahunAjarController;
 use App\Http\Controllers\Admin\Siswa\AdminDataSiswaController;
 use App\Http\Controllers\Siswa\SiswaAbsenController;
@@ -63,6 +65,28 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
                 Route::get('/data/{id}', 'dataById')->name('admin.pengelolaan.tahun-ajar.data.id');
             });
         });
+
+        Route::controller(AdminPenempatanController::class)->group(function () {
+            Route::prefix('/penempatan')->group(function () {
+                Route::get('/', 'index')->name('admin.pengelolaan.penempatan');
+                Route::post('/add', 'addPenempatan')->name('admin.pengelolaan.penempatan.add');
+                Route::post('/{id}/edit', 'editPenempatan')->name('admin.pengelolaan.penempatan.edit');
+                Route::get('/{id}/delete', 'deletePenempatan')->name('admin.pengelolaan.penempatan.delete');
+                Route::get('/data', 'data')->name('admin.pengelolaan.penempatan.data');
+                Route::get('/data/{id}', 'dataById')->name('admin.pengelolaan.penempatan.data.id');
+            });
+        });
+
+        Route::controller(AdminPembimbinganController::class)->group(function () {
+            Route::prefix('/pembimbingan')->group(function () {
+                Route::get('/', 'index')->name('admin.pengelolaan.pembimbingan');
+                Route::post('/add', 'addPembimbingan')->name('admin.pengelolaan.pembimbingan.add');
+                Route::post('/{id}/edit', 'editPembimbingan')->name('admin.pengelolaan.pembimbingan.edit');
+                Route::get('/{id}/delete', 'deletePembimbingan')->name('admin.pengelolaan.pembimbingan.delete');
+                Route::get('/data', 'data')->name('admin.pengelolaan.pembimbingan.data');
+                Route::get('/data/{id}', 'dataById')->name('admin.pengelolaan.pembimbingan.data.id');
+            });
+        });
     });
 
     Route::prefix('/siswa')->group(function () {
@@ -98,6 +122,7 @@ Route::prefix('/siswa')->middleware('auth')->group(function () {
     Route::controller(SiswaAbsenController::class)->group(function () {
         Route::prefix('absen')->group(function () {
             Route::get('/', 'index')->name('siswa.absen');
+            Route::post('/', 'absen')->name('siswa.absen.post');
         });
     });
 });

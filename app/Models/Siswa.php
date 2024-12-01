@@ -32,4 +32,14 @@ class Siswa extends Model
     {
         return $this->belongsTo(TahunAjar::class, 'tahun_ajar_id', 'id');
     }
+
+    public function penempatan()
+    {
+        return $this->hasOne(Menempati::class, 'siswa_id', 'id');
+    }
+
+    public function pembimbingan()
+    {
+        return $this->hasOne(Pembimbingan::class, 'siswa_id', 'id');
+    }
 }

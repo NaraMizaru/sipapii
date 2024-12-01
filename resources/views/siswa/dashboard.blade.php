@@ -42,8 +42,11 @@
             </div>
 
             <div class="row">
+                @include('template.feedback')
+
                 <div class="col-12 col-md-6 mt-2">
-                    <a href="" class="btn btn-success d-block w-100 rounded-5">
+                    <a href="{{ route('siswa.absen', ['type' => 'masuk']) }}"
+                        class="btn btn-success d-block w-100 rounded-5">
                         <div class="d-block">
                             <h5 class="p-0 m-0 text-white">Absen Masuk</h5>
                             <p class="p-0 m-0">Belum Absen</p>
@@ -51,7 +54,8 @@
                     </a>
                 </div>
                 <div class="col-12 col-md-6 mt-2">
-                    <a href="" class="btn btn-danger d-block w-100 rounded-5">
+                    <a href="{{ route('siswa.absen', ['type' => 'pulang']) }}"
+                        class="btn btn-danger d-block w-100 rounded-5">
                         <div class="d-block">
                             <h5 class="p-0 m-0 text-white">Absen Pulang</h5>
                             <p class="p-0 m-0">Belum Absen</p>

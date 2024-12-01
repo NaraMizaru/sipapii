@@ -74,7 +74,7 @@ class AdminDataSiswaController extends Controller
         $columns = $request->input('columns');
         $order = $request->input('order');
 
-        $data = User::query();
+        $data = User::query()->where('role', 'siswa')->with('siswa', 'siswa.kelas', 'siswa.tahunAjar');
 
         if (!empty($order)) {
             $order = $order[0];
@@ -82,12 +82,12 @@ class AdminDataSiswaController extends Controller
             $orderDir = $order['dir'];
 
             if (isset($columns[$orderBy]['data'])) {
-                $data->orderBy($columns[$orderBy]['data'], $orderDir)->where('role', 'siswa')->with('siswa', 'siswa.kelas', 'siswa.tahunAjar');
+                $data->orderBy($columns[$orderBy]['data'], $orderDir);
             } else {
-                $data->orderBy('nama_lengkap', 'asc')->where('role', 'siswa')->with('siswa', 'siswa.kelas', 'siswa.tahunAjar');
+                $data->orderBy('nama_lengkap', 'asc');
             }
         } else {
-            $data->orderBy('nama_lengkap', 'asc')->where('role', 'siswa')->with('siswa', 'siswa.kelas', 'siswa.tahunAjar');
+            $data->orderBy('nama_lengkap', 'asc');
         }
 
         $count = $data->count();

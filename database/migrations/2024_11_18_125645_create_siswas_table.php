@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nis')->unique();
             $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan']);
             $table->foreignUuid('kelas_id')->constrained('kelas')->cascadeOnDelete();
-            $table->foreignUuid('tahun_ajar_id')->constrained('tahun_ajar')->cascadeOnDelete();
+            $table->foreignUuid('tahun_ajar_id')->constrained('tahun_ajars')->cascadeOnDelete();
             $table->timestamps();
         });
     }

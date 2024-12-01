@@ -45,6 +45,20 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item {{ @$menu_type == 'penempatan' ? 'active' : '' }}">
+                    <a href="{{ route('admin.pengelolaan.penempatan') }}" class="sidebar-link">
+                        <i class="fa-regular fa-location-dot"></i>
+                        <span>Kelola Penempatan</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item {{ @$menu_type == 'pembimbingan' ? 'active' : '' }}">
+                    <a href="{{ route('admin.pengelolaan.pembimbingan') }}" class="sidebar-link">
+                        <i class="fa-regular fa-screen-users"></i>
+                        <span>Kelola Pembimbingan</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-title">Data</li>
 
                 <li class="sidebar-item has-sub {{ @$menu_type == 'siswa' ? 'active' : '' }}">

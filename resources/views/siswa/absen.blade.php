@@ -1,8 +1,20 @@
 @extends('layouts.app-2')
-@section('title', 'Siswa Dashboard')
+
+@php
+    if (Request::query('type') == 'masuk') {
+        $status = 'Masuk';
+    } elseif (Request::query('type') == 'pulang') {
+        $status = 'Pulang';
+    } else {
+        $status = '';
+    }
+@endphp
+
+@section('title', 'Absen ' . $status)
 
 @push('css')
     {{-- CSS Only For This Page --}}
+    <link rel="stylesheet" href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}">
     <style>
         .capsule {
             position: relative;
@@ -18,20 +30,21 @@
             height: 140px;
             background: #435ebe;
         }
+
+        .webcam,
+        .webcam video {
+            display: inline-block;
+            width: 100% !important;
+            height: auto !important;
+            margin: auto;
+            text-align: center;
+            border-radius: 15px;
+            overflow: hidden;
+        }
     </style>
 @endpush
 
 @section('content')
-    @php
-        if (Request::query('type') == 'masuk') {
-            $status = 'Masuk';
-        } elseif (Request::query('type') == 'pulang') {
-            $status = 'Pulang';
-        } else {
-            $status = '';
-        }
-    @endphp
-
     <div class="capsule pt-1 px-3">
         <div class="card p-4 shadow-lg">
             <div class="row">
@@ -48,29 +61,105 @@
             </div>
 
             <div class="divider">
-                <div class="divider-text">Latitude: <span>12312312</span> - Longitude: <span>52341234</span></div>
+                <div class="divider-text">Lat-Long: <span id="latLong"></span></div>
             </div>
 
             <div class="row">
+                @include('template.feedback')
                 <div class="col-12 d-flex align-items-center justify-content-center">
-                    <div class="card border">
-                        <div class="card-body">
-                            <img src="{{ asset('assets/static/images/camera.png') }}" class="img-fluid">
+                    <form action="{{ route('siswa.absen.post', ['type' => strtolower($status)]) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div class="card border">
+                            <div class="card-body text-center">
+                                <!-- Kamera Desktop #m1 -->
+                                <div class="d-inline-block text-center">
+                                    <div id="camera" class="d-none mb-3"></div>
+                                </div>
+                                <!-- Dump Image #m1 -->
+                                <img id="dumpImage" src="{{ asset('assets/static/images/camera.png') }}"
+                                    class="img-fluid mb-3">
+                                <!-- Preview Container #m1 -->
+                                <div id="preview" class="d-none">
+                                    <img id="capturedImage" class="img-fluid">
+                                </div>
+                                <!-- Hidden File Input #m1 -->
+                                <input type="file" accept="image/*" capture="camera" name="camera_data" id="cameraInput"
+                                    class="d-none">
+                                <input type="hidden" name="lat" id="latitude" value="">
+                                <input type="hidden" name="long" id="longitude" value="">
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-success d-block w-100" id="takePicture">
+                                    <i class="fa-regular fa-camera me-2"></i>Ambil Gambar
+                                </button>
+
+                                <div class="row d-none" id="btnGroupAbsen">
+                                    <div class="col-8 col-md-10">
+                                        <button type="submit" class="btn btn-success w-100" id="takePicture">
+                                            <i class="fa-regular fa-camera me-2"></i>Absen {{ $status }}
+                                        </button>
+                                    </div>
+                                    <div class="col-4 col-md-2">
+                                        <button type="button" class="btn btn-warning w-100" id="retakePicture">
+                                            <i class="fa-regular fa-rotate"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                          <div class="btn btn-success d-block"><i class="fa-regular fa-camera me-2"></i>Absen {{ $status }}</div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
+
         </div>
-        <div style="margin-bottom: 5rem;"></div>
     </div>
+
+    <div style="margin-bottom: 7rem;"></div>
 @endsection
 
 @push('js')
     {{-- JS Only For This Page --}}
     <script src="{{ asset('assets/extensions/webcamjs/webcamjs.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
+    <script src="{{ asset('assets/static/js/helper/cam.js') }}"></script>
+    <script>
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const long = position.coords.longitude;
+
+                    $('#latitude').val(lat);
+                    $('#longitude').val(long);
+
+                    $('#latLong').text(`${lat}, ${long}`);
+
+                    Toastify({
+                        text: "Lokasi anda telah terdektesi",
+                        duration: 3000,
+                        close: true,
+                        backgroundColor: "#198754",
+                    }).showToast()
+                },
+                function(error) {
+                    Toastify({
+                        text: "Gagal mendeteksi lokasi anda",
+                        duration: 3000,
+                        close: true,
+                        backgroundColor: "#dc3545",
+                    }).showToast()
+                }
+            );
+        } else {
+            Toastify({
+                text: "Geolocation tidak didukung pada browser anda",
+                duration: 3000,
+                close: true,
+                backgroundColor: "#ffc107",
+            }).showToast()
+        }
+    </script>
     <script>
         $(document).ready(function() {
             const namaLengkap = $('#namaLengkap');

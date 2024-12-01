@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Absen extends Model
 {
     use HasUuids;
+
+    protected $fillable = [
+        'siswa_id',
+        'tanggal',
+        'latitude',
+        'longitude',
+        'jam_masuk',
+        'jam_pulang',
+        'status',
+        'alasan',
+        'foto',
+        'jarak',
+    ];
 }

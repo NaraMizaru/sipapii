@@ -15,8 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('siswa_id')->constrained('siswas')->cascadeOnDelete();
             $table->string('tanggal');
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->string('jarak')->nullable();
             $table->string('jam_masuk')->nullable();
             $table->string('jam_pulang')->nullable();

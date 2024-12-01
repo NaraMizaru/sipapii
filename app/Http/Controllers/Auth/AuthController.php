@@ -35,12 +35,16 @@ class AuthController extends Controller
                 } else {
                     return redirect()->back()->with('error', 'Username atau password salah');
                 }
-            } else if ($user->role == 'guru') {
-                Auth::login($user, $request->has('remember'));
-                return redirect()->route('');
             } else {
-                Auth::login($user, $request->has('remember'));
-                return redirect()->route('siswa.dashboard');
+                if ($user->password == $request->password) {
+                    Auth::login($user, $request->has('remember'));
+                    if ($user->role == 'gurus') {
+                    } else {
+                        return redirect()->route('siswa.dashboard');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'Username atau password salah');
+                }
             }
         }
     }

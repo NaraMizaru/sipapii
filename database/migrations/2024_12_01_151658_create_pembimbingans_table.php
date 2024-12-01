@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('instansis', function (Blueprint $table) {
+        Schema::create('pembimbingans', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('nama');
-            $table->string('alamat');
-            $table->enum('domisili', ['Dalam Kota', 'Luar Kota'])->default('Dalam Kota');
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
+            $table->foreignUuid('siswa_id')->constrained('siswas')->cascadeOnDelete();
+            $table->foreignUuid('pembimbing_id')->constrained('gurus')->cascadeOnDelete();
+            $table->foreignUuid('guru_mapel_pkl_id')->constrained('gurus')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('instansis');
+        Schema::dropIfExists('pembimbingans');
     }
 };
