@@ -46,19 +46,19 @@
 
                 <div class="col-12 col-md-6 mt-2">
                     <a href="{{ route('siswa.absen', ['type' => 'masuk']) }}"
-                        class="btn btn-success d-block w-100 rounded-5">
+                        class="btn btn-success d-block w-100 rounded-5 {{ @$absen->jam_masuk ? 'disabled' : '' }}">
                         <div class="d-block">
                             <h5 class="p-0 m-0 text-white">Absen Masuk</h5>
-                            <p class="p-0 m-0">Belum Absen</p>
+                            <p class="p-0 m-0">{{ @$absen->jam_masuk ?: 'Belum Absen' }}</p>
                         </div>
                     </a>
                 </div>
                 <div class="col-12 col-md-6 mt-2">
-                    <a href="{{ route('siswa.absen', ['type' => 'pulang']) }}"
-                        class="btn btn-danger d-block w-100 rounded-5">
+                    <a href="{{ route('siswa.absen', ['type' => 'pulang', 'absen_id' => @$absen->id]) }}"
+                        class="btn btn-danger d-block w-100 rounded-5 {{ @$absen->jam_pulang ? 'disabled' : '' }}">
                         <div class="d-block">
                             <h5 class="p-0 m-0 text-white">Absen Pulang</h5>
-                            <p class="p-0 m-0">Belum Absen</p>
+                            <p class="p-0 m-0">{{ @$absen->jam_pulang ?: 'Belum Absen' }}</p>
                         </div>
                     </a>
                 </div>

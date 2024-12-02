@@ -18,23 +18,52 @@ class SiswaAbsenController extends Controller
   {
     $data['siswa'] = Auth::user();
 
+    if (!Menempati::where('siswa_id', Auth::user()->siswa->id)->first()) {
+      return redirect()->route('siswa.dashboard')->with('error', 'Anda belum menempati instansi');
+    }
+
     if ($request->query('type') != 'masuk' && $request->query('type') != 'pulang') {
       return redirect()->route('siswa.dashboard')->with('error', 'Invalid type absen');
+    }
+
+    $absen = Absen::where('id', $request->query('absen_id'))->first();
+    if (!$absen) {
+      return redirect()->route('siswa.dashboard')->with('error', 'Anda belum melakukan absen masuk.');
+    }
+
+    $absenHariIni = Absen::where('siswa_id', Auth::user()->siswa->id)
+      ->where('tanggal', Carbon::now()->format('d-m-Y'))
+      ->first();
+
+    if ($request->query('type') == 'masuk' && $absenHariIni && $absenHariIni->jam_masuk) {
+      return redirect()->route('siswa.dashboard')->with('error', 'Anda sudah melakukan absen masuk');
+    }
+
+    if ($request->query('type') == 'pulang') {
+      if (!$absenHariIni || !$absenHariIni->jam_masuk) {
+        return redirect()->route('siswa.dashboard')->with('error', 'Anda belum melakukan absen masuk');
+      }
+
+      if ($absenHariIni->jam_pulang) {
+        return redirect()->route('siswa.dashboard')->with('error', 'Anda sudah melakukan absen pulang');
+      }
     }
 
     return view('siswa.absen')->with($data);
   }
 
-  public function absen(Request $request, $id = null)
+  public function absen(Request $request)
   {
+    $id = $request->query('absen_id');
+
     if ($request->query('type') != 'masuk' && $request->query('type') != 'pulang') {
       return redirect()->route('siswa.dashboard')->with('error', 'Invalid type absen');
     }
 
     $validator = Validator::make($request->all(), [
       'camera_data' => 'required|file',
-      'lat' => 'required|numeric|between:-90,90',
-      'long' => 'required|numeric|between:-180,180',
+      'lat' => 'required_if:type,masuk|numeric|between:-90,90',
+      'long' => 'required_if:type,masuk|numeric|between:-180,180',
       'status' => 'nullable|in:Hadir,Sakit,Izin',
       'alasan' => 'required_if:status,Izin,Sakit',
     ]);
@@ -44,7 +73,6 @@ class SiswaAbsenController extends Controller
     }
 
     $menempati = Menempati::where('siswa_id', Auth::user()->siswa->id)->with('instansi')->first();
-
     $jarak = $this->calculateDistance($request->lat, $request->long, $menempati->instansi->latitude, $menempati->instansi->longitude);
 
     $input = $request->all();
@@ -54,7 +82,6 @@ class SiswaAbsenController extends Controller
     $input['longitude'] = $request->long;
     $input['status'] = 'Hadir';
     $input['alasan'] = $request->alasan;
-    $input['jarak'] = $jarak;
 
     if ($request->hasFile('camera_data')) {
       $file = $request->camera_data;
@@ -64,13 +91,20 @@ class SiswaAbsenController extends Controller
       $storedFile = $file->storeAs($storePath, $file->hashName());
       $filePath = Storage::url($storedFile);
 
-      $input['foto'] = $filePath;
+      if ($request->query('type') == 'masuk') {
+        $input['foto_masuk'] = $filePath;
+      } else if ($request->query('type') == 'pulang') {
+        $input['foto_pulang'] = $filePath;
+      }
     }
 
     if ($request->query('type') == 'masuk') {
       $input['jam_masuk'] = Carbon::now()->format('H:i');
+      $input['jarak'] = $jarak;
     } else if ($request->query('type') == 'pulang') {
       $input['jam_pulang'] = Carbon::now()->format('H:i');
+
+      
     } else {
       return redirect()->route('siswa.dashboard');
     }

@@ -5,6 +5,7 @@
         $status = 'Masuk';
     } elseif (Request::query('type') == 'pulang') {
         $status = 'Pulang';
+        $absenId = Request::query('absen_id');
     } else {
         $status = '';
     }
@@ -15,6 +16,7 @@
 @push('css')
     {{-- CSS Only For This Page --}}
     <link rel="stylesheet" href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/extensions/choices.js/public/assets/styles/choices.css') }}">
     <style>
         .capsule {
             position: relative;
@@ -67,8 +69,8 @@
             <div class="row">
                 @include('template.feedback')
                 <div class="col-12 d-flex align-items-center justify-content-center">
-                    <form action="{{ route('siswa.absen.post', ['type' => strtolower($status)]) }}" method="POST"
-                        enctype="multipart/form-data">
+                    <form action="{{ route('siswa.absen.post', ['type' => strtolower($status), 'absen_id' => @$absenId]) }}"
+                        method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card border">
                             <div class="card-body text-center">
@@ -95,12 +97,15 @@
                                 </button>
 
                                 <div class="row d-none" id="btnGroupAbsen">
-                                    <div class="col-8 col-md-10">
-                                        <button type="submit" class="btn btn-success w-100" id="takePicture">
+                                    <div class="col-9 col-md-10">
+                                        <button type="{{ Request::query('type') == 'masuk' ? 'submit' : 'button' }}"
+                                            class="btn btn-success w-100" id="takePicture"
+                                            @if (Request::query('type') == 'pulang') data-bs-toggle="modal" 
+                                                data-bs-target="#absenPulangModal" @endif>
                                             <i class="fa-regular fa-camera me-2"></i>Absen {{ $status }}
                                         </button>
                                     </div>
-                                    <div class="col-4 col-md-2">
+                                    <div class="col-3 col-md-2">
                                         <button type="button" class="btn btn-warning w-100" id="retakePicture">
                                             <i class="fa-regular fa-rotate"></i>
                                         </button>
@@ -111,11 +116,48 @@
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 
     <div style="margin-bottom: 7rem;"></div>
+
+    <div class="modal fade" id="absenPulangModal" tabindex="-1" role="dialog" aria-labelledby="absenPulangModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="absenPulangModalTitle">Data Absensi Siswa Hari Ini</h5>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="selectKeterangan">Keterangan</label>
+                            <select name="keterangan" id="selectKeterangan" class="form-control choices">
+                                <option value="Hadir">Hadir</option>
+                                <option value="Izin">Izin</option>
+                                <option value="Sakit">Sakit</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="alasanGroup" style="display: none;">
+                            <label for="alasan">Alasan</label>
+                            <input type="text" id="alasan" name="alasan" class="form-control"
+                                placeholder="Masukan alasan">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jurnal">Jurnal</label>
+                            <textarea name="jurnal" id="jurnal" rows="3" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                            <span>Tutup</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
@@ -123,12 +165,31 @@
     <script src="{{ asset('assets/extensions/webcamjs/webcamjs.min.js') }}"></script>
     <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
     <script src="{{ asset('assets/static/js/helper/cam.js') }}"></script>
+    <script src="{{ asset('assets/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
+    <script>
+        let choices = document.querySelectorAll(".choices")
+        let initChoice
+        for (let i = 0; i < choices.length; i++) {
+            if (choices[i].classList.contains("multiple-remove")) {
+                initChoice = new Choices(choices[i], {
+                    delimiter: ",",
+                    editItems: true,
+                    maxItemCount: -1,
+                    removeItemButton: true,
+                })
+            } else {
+                initChoice = new Choices(choices[i])
+            }
+        }
+    </script>
     <script>
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(position) {
                     const lat = position.coords.latitude;
                     const long = position.coords.longitude;
+
+                    console.log(lat, long);
 
                     $('#latitude').val(lat);
                     $('#longitude').val(long);
@@ -187,6 +248,14 @@
             }
 
             $("#greetings").text(ucapan);
+
+            $('#selectKeterangan').on('change', function() {
+                if ($(this).val() === 'Izin' || $(this).val() === 'Sakit') {
+                    $('#alasanGroup').show();
+                } else {
+                    $('#alasanGroup').hide();
+                }
+            });
         });
     </script>
     <script>

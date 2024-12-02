@@ -13,6 +13,7 @@ class SiswaDashboardController extends Controller
     public function index()
     {
         $data['siswa'] = Auth::user();
+        $data['absen'] = Absen::where('siswa_id', Auth::user()->siswa->id)->where('tanggal', Carbon::now()->format('d-m-Y'))->first();
 
         return view('siswa.dashboard', [], ['menu_type' => 'dashboard'])->with($data);
     }

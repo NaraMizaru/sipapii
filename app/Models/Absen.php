@@ -18,7 +18,8 @@ class Absen extends Model
         'jam_pulang',
         'status',
         'alasan',
-        'foto',
+        'foto_masuk',
+        'foto_pulang',
         'jarak',
     ];
 }
