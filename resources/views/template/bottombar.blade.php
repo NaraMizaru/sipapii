@@ -43,7 +43,7 @@ border-primary"
             <p class="fw-bold">Absen</p>
         </div>
     </a>
-    <a href="" class="row d-flex align-items-center justify-content-center text-center w-100"
+    <a href="{{ route('siswa.riwayat') }}" class="row d-flex align-items-center justify-content-center text-center w-100"
         style="height: 45px">
         <div class="col">
             <i class="fa-regular fa-clock-rotate-left fs-4"></i>

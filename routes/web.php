@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Pengelolaan\AdminTahunAjarController;
 use App\Http\Controllers\Admin\Siswa\AdminDataSiswaController;
 use App\Http\Controllers\Siswa\SiswaAbsenController;
 use App\Http\Controllers\Siswa\SiswaDashboardController;
+use App\Http\Controllers\Siswa\SiswaRiwayatController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -26,7 +27,7 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 // Route Path Admin
-Route::prefix('/admin')->middleware('auth')->group(function () {
+Route::prefix('/admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::controller(AdminDashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('admin.dashboard');
     });
@@ -114,15 +115,21 @@ Route::prefix('/admin')->middleware('auth')->group(function () {
     });
 });
 
-Route::prefix('/siswa')->middleware('auth')->group(function () {
+Route::prefix('/siswa')->middleware(['auth', 'role:siswa'])->group(function () {
     Route::controller(SiswaDashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('siswa.dashboard');
     });
 
     Route::controller(SiswaAbsenController::class)->group(function () {
-        Route::prefix('absen')->group(function () {
+        Route::prefix('/absen')->group(function () {
             Route::get('/', 'index')->name('siswa.absen');
             Route::post('/', 'absen')->name('siswa.absen.post');
+        });
+    });
+
+    Route::controller(SiswaRiwayatController::class)->group(function () {
+        Route::prefix('/riwayat')->group(function () {
+            Route::get('/', 'index')->name('siswa.riwayat');
         });
     });
 });

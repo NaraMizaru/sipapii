@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jurnals', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('siswa_id')->constrained('siswas')->cascadeOnDelete();
+            $table->foreignUuid('guru_mapel_pkl_id')->constrained('siswas')->cascadeOnDelete();
+            $table->string('tanggal');
+            $table->longText('deskripsi_jurnal');
+            $table->enum('validasi', ['Belum Divalidasi', 'Divalidasi', 'Ditolak'])->default('Belum Divalidasi');
             $table->timestamps();
         });
     }

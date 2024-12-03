@@ -11,10 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('absensis', function (Blueprint $table) {
-        //     $table->uuid('id')->primary();
-        //     $table->timestamps();
-        // });
+        Schema::create('absensis', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('siswa_id')->constrained('siswas')->cascadeOnDelete();
+            $table->string('tanggal');
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+            $table->string('jarak')->nullable();
+            $table->string('jam_masuk')->nullable();
+            $table->string('jam_pulang')->nullable();
+            $table->enum('status', ['Hadir', 'Izin', 'Sakit', 'Alpa']);
+            $table->longText('alasan')->nullable();
+            $table->string('foto_masuk')->nullable();
+            $table->string('foto_pulang')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**

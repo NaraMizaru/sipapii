@@ -42,4 +42,14 @@ class Siswa extends Model
     {
         return $this->hasOne(Pembimbingan::class, 'siswa_id', 'id');
     }
+
+    public function absen()
+    {
+        return $this->hasMany(Absen::class, 'siswa_id', 'id');
+    }
+
+    public function jurnal()
+    {
+        return $this->hasMany(Jurnal::class, 'siswa_id', 'id');
+    }
 }

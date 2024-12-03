@@ -79,7 +79,7 @@
                                 <i class="fa-regular fa-right-to-bracket fs-3 text-success"></i>
                                 <div class="">
                                     <strong class="ms-3">Hadir</strong>
-                                    <p class="ms-3 mb-0">0 Hari</p>
+                                    <p class="ms-3 mb-0">{{ $status_counts['Hadir'] }} Hari</p>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                                 <i class="fa-regular fa-flag-swallowtail fs-3 text-primary"></i>
                                 <div class="">
                                     <strong class="ms-3">Izin</strong>
-                                    <p class="ms-3 mb-0">0 Hari</p>
+                                    <p class="ms-3 mb-0">{{ $status_counts['Izin'] }} Hari</p>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
                                 <i class="fa-regular fa-face-thermometer fs-3 text-warning"></i>
                                 <div class="">
                                     <strong class="ms-3">Sakit</strong>
-                                    <p class="ms-3 mb-0">0 Hari</p>
+                                    <p class="ms-3 mb-0">{{ $status_counts['Sakit'] }} Hari</p>
                                 </div>
                             </div>
                         </div>
@@ -121,10 +121,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-start">
-                                <i class="fa-regular fa-alarm-exclamation fs-3 text-danger"></i>
+                                <i class="fa-regular fa-circle-exclamation fs-3 text-danger"></i>
                                 <div class="">
-                                    <strong class="ms-3">Terlambat</strong>
-                                    <p class="ms-3 mb-0">0 Hari</p>
+                                    <strong class="ms-3">Alpa</strong>
+                                    <p class="ms-3 mb-0">{{ $status_counts['Alpa'] }} Hari</p>
                                 </div>
                             </div>
                         </div>
@@ -139,39 +139,46 @@
             <h5>Data Jurnal</h5>
         </div>
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Senin, 18 Oktober 2024</h4>
-                    </div>
-                    <div class="card-body" style="max-height: 200px; overflow-y: auto;">
-                        <p class="card-text">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt provident ad voluptates
-                            veritatis ipsa earum
-                            expedita doloribus, fugit assumenda qui dolor impedit consequatur, libero non perspiciatis?
-                            Provident vitae sunt
-                            fuga commodi, officiis doloribus laudantium dolores aperiam sint eligendi autem fugiat quas, sit
-                            voluptatem
-                            omnis? Minima dicta in soluta voluptatibus placeat corrupti laudantium tempore? Ipsa eligendi
-                            quod unde hic
-                            dolore debitis nihil aperiam culpa odio possimus, ducimus natus excepturi eveniet dolorem quo
-                            ullam eum iure
-                            assumenda nisi repellat earum at quam vitae doloremque! At voluptate vero quis sapiente! Odit
-                            quae distinctio
-                            quidem sed maxime fuga consequatur, quis perferendis! Ipsa, aliquid provident.
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <p class="card-text">Status: <span class="text-danger">Belum Disetujui</span></p>
-                            <div class="float-right">
-                                <a href="" class="btn btn-primary">Ubah Jurnal</a>
+            @foreach ($jurnal as $item)
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">{{ $item->tanggal }}</h4>
+                        </div>
+                        <div class="card-body" style="max-height: 200px; overflow-y: auto;">
+                            <p class="card-text">
+                                @if ($item->deskripsi_jurnal)
+                                    {{ $item->deskripsi_jurnal }}
+                                @else
+                                    <span class="d-flex align-self-center justify-content-center">Tidak membuat
+                                        jurnal</span>
+                                @endif
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="card-text">
+                                    Status:
+                                    @if ($item->validasi == 'Divalidasi')
+                                        <span class="badge bg-success">Divalidasi</span>
+                                    @elseif ($item->validasi == 'Belum Divalidasi')
+                                        <span class="badge bg-warning">Belum Divalidasi</span>
+                                    @elseif ($item->validasi == 'Ditolak')
+                                        <span class="badge bg-danger">Ditolak</span>
+                                    @else
+                                        <span class="badge bg-danger">Tidak Mengisi</span>
+                                    @endif
+                                </p>
+                                <div class="">
+                                    @if ($item->validasi == 'Belum Divalidasi' || $item->validasi == 'Ditolak')
+                                        <a href="" class="btn btn-primary btn-sm">Ubah Jurnal</a>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-            </div>
+            @endforeach
         </div>
     </div>
 

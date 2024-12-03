@@ -74,10 +74,12 @@
                         @csrf
                         <div class="card border">
                             <div class="card-body text-center">
+
                                 <!-- Kamera Desktop #m1 -->
                                 <div class="d-inline-block text-center">
                                     <div id="camera" class="d-none mb-3"></div>
                                 </div>
+
                                 <!-- Dump Image #m1 -->
                                 <img id="dumpImage" src="{{ asset('assets/static/images/camera.png') }}"
                                     class="img-fluid mb-3">
@@ -85,11 +87,20 @@
                                 <div id="preview" class="d-none">
                                     <img id="capturedImage" class="img-fluid">
                                 </div>
-                                <!-- Hidden File Input #m1 -->
-                                <input type="file" accept="image/*" capture="camera" name="camera_data" id="cameraInput"
-                                    class="d-none">
-                                <input type="hidden" name="lat" id="latitude" value="">
-                                <input type="hidden" name="long" id="longitude" value="">
+                                <div class="form-group">
+                                    @if (Request::query('type') == 'masuk')
+                                        <select name="status" id="selectKeterangan" class="form-control choices" required>
+                                            <option value="Hadir">Hadir</option>
+                                            <option value="Izin">Izin</option>
+                                            <option value="Sakit">Sakit</option>
+                                        </select>
+                                    @endif
+                                    <!-- Hidden File Input #m1 -->
+                                    <input type="file" accept="image/*" capture="camera" name="camera_data"
+                                        id="cameraInput" class="d-none">
+                                    <input type="hidden" name="lat" id="latitude" value="">
+                                    <input type="hidden" name="long" id="longitude" value="">
+                                </div>
                             </div>
                             <div class="card-footer">
                                 <button type="button" class="btn btn-success d-block w-100" id="takePicture">
@@ -99,7 +110,7 @@
                                 <div class="row d-none" id="btnGroupAbsen">
                                     <div class="col-9 col-md-10">
                                         <button type="{{ Request::query('type') == 'masuk' ? 'submit' : 'button' }}"
-                                            class="btn btn-success w-100" id="takePicture"
+                                            class="btn btn-success w-100" id="submitAbsen"
                                             @if (Request::query('type') == 'pulang') data-bs-toggle="modal" 
                                                 data-bs-target="#absenPulangModal" @endif>
                                             <i class="fa-regular fa-camera me-2"></i>Absen {{ $status }}
@@ -128,11 +139,12 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="absenPulangModalTitle">Data Absensi Siswa Hari Ini</h5>
                 </div>
-                <form method="POST">
+                <form method="POST" id="absenPulangForm" enctype="multipart/form-data">
+                    @csrf
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="selectKeterangan">Keterangan</label>
-                            <select name="keterangan" id="selectKeterangan" class="form-control choices">
+                            <select name="status" id="selectKeterangan" class="form-control choices" required>
                                 <option value="Hadir">Hadir</option>
                                 <option value="Izin">Izin</option>
                                 <option value="Sakit">Sakit</option>
@@ -141,17 +153,21 @@
                         <div class="form-group" id="alasanGroup" style="display: none;">
                             <label for="alasan">Alasan</label>
                             <input type="text" id="alasan" name="alasan" class="form-control"
-                                placeholder="Masukan alasan">
+                                placeholder="Masukan alasan (Wajib)">
                         </div>
-
                         <div class="form-group">
                             <label for="jurnal">Jurnal</label>
-                            <textarea name="jurnal" id="jurnal" rows="3" class="form-control"></textarea>
+                            <textarea name="jurnal" id="jurnal" rows="3" class="form-control" required></textarea>
                         </div>
+                        <input type="file" accept="image/*" capture="camera" name="camera_data"
+                            id="camerInputPulang" class="d-none">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                        <button type="button" class="btn" data-bs-dismiss="modal">
                             <span>Tutup</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <span>Absen</span>
                         </button>
                     </div>
                 </form>
@@ -283,5 +299,59 @@
 
         setInterval(updateClock, 1000);
         updateClock();
+    </script>
+    <script>
+        $('#submitAbsen').click(() => {
+            const keterangan = $('#selectKeterangan').val();
+            const alasan = $('#alasan').val();
+            const jurnal = $('#jurnal').val();
+            $('#absenPulangForm').attr('action',
+                `{!! route('siswa.absen.post', ['type' => 'pulang', 'absen_id' => @$absenId]) !!}`);
+
+
+            const cameraData = $('#capturedImage').attr('src');
+            const imageFile = dataURItoFile(cameraData, 'snapshot.jpg');
+            const fileInput = document.getElementById("camerInputPulang");
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(imageFile);
+            fileInput.files = dataTransfer.files;
+
+            if (keterangan === 'Izin' || keterangan === 'Sakit') {
+                if (alasan === '') {
+                    Toastify({
+                        text: "Alasan tidak boleh kosong",
+                        duration: 3000,
+                        close: true,
+                        backgroundColor: "#dc3545",
+                    }).showToast()
+                    return;
+                }
+            }
+
+            if (jurnal === '') {
+                Toastify({
+                    text: "Jurnal tidak boleh kosong",
+                    duration: 3000,
+                    close: true,
+                    backgroundColor: "#dc3545",
+                }).showToast()
+                return;
+            }
+
+            // $('#absenPulangModal form').submit();
+        })
+
+        const dataURItoFile = (dataURI, fileName) => {
+            const byteString = atob(dataURI.split(",")[1]);
+            const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new File([ab], fileName, {
+                type: mimeString
+            });
+        }
     </script>
 @endpush
