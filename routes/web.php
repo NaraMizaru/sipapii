@@ -130,6 +130,7 @@ Route::prefix('/siswa')->middleware(['auth', 'role:siswa'])->group(function () {
     Route::controller(SiswaRiwayatController::class)->group(function () {
         Route::prefix('/riwayat')->group(function () {
             Route::get('/', 'index')->name('siswa.riwayat');
+            Route::get('/data', 'data')->name('siswa.riwayat.data');
         });
     });
 });

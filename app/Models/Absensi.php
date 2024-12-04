@@ -22,4 +22,9 @@ class Absensi extends Model
         'foto_pulang',
         'jarak',
     ];
+
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class);
+    }
 }

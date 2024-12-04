@@ -139,46 +139,56 @@
             <h5>Data Jurnal</h5>
         </div>
         <div class="row">
-            @foreach ($jurnal as $item)
-                <div class="col-12 col-md-6 col-lg-4">
+            @if ($jurnal->isEmpty())
+                <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">{{ $item->tanggal }}</h4>
+                        <div class="card-body">
+                            <p class="text-center">Belum ada data jurnal</p>
                         </div>
-                        <div class="card-body" style="max-height: 200px; overflow-y: auto;">
-                            <p class="card-text">
-                                @if ($item->deskripsi_jurnal)
-                                    {{ $item->deskripsi_jurnal }}
-                                @else
-                                    <span class="d-flex align-self-center justify-content-center">Tidak membuat
-                                        jurnal</span>
-                                @endif
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            <div class="d-flex align-items-center justify-content-between">
+                    </div>
+                </div>
+            @else
+                @foreach ($jurnal as $item)
+                    <div class="col-12 col-md-6 col-lg-4 mt-3">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h4 class="card-title">{{ $item->tanggal }}</h4>
+                            </div>
+                            <div class="card-body" style="max-height: 200px; overflow-y: auto;">
                                 <p class="card-text">
-                                    Status:
-                                    @if ($item->validasi == 'Divalidasi')
-                                        <span class="badge bg-success">Divalidasi</span>
-                                    @elseif ($item->validasi == 'Belum Divalidasi')
-                                        <span class="badge bg-warning">Belum Divalidasi</span>
-                                    @elseif ($item->validasi == 'Ditolak')
-                                        <span class="badge bg-danger">Ditolak</span>
+                                    @if ($item->deskripsi_jurnal)
+                                        {{ $item->deskripsi_jurnal }}
                                     @else
-                                        <span class="badge bg-danger">Tidak Mengisi</span>
+                                        <span class="d-flex align-items-center justify-content-center">Tidak membuat
+                                            jurnal</span>
                                     @endif
                                 </p>
-                                <div class="">
-                                    @if ($item->validasi == 'Belum Divalidasi' || $item->validasi == 'Ditolak')
-                                        <a href="" class="btn btn-primary btn-sm">Ubah Jurnal</a>
-                                    @endif
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <p class="card-text">
+                                        Status:
+                                        @if ($item->validasi == 'Divalidasi')
+                                            <span class="badge bg-success">Divalidasi</span>
+                                        @elseif ($item->validasi == 'Belum Divalidasi')
+                                            <span class="badge bg-warning">Belum Divalidasi</span>
+                                        @elseif ($item->validasi == 'Ditolak')
+                                            <span class="badge bg-danger">Ditolak</span>
+                                        @else
+                                            <span class="badge bg-danger">Tidak Mengisi</span>
+                                        @endif
+                                    </p>
+                                    <div class="">
+                                        @if ($item->validasi == 'Belum Divalidasi' || $item->validasi == 'Ditolak')
+                                            <a href="" class="btn btn-primary btn-sm">Ubah Jurnal</a>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            @endif
         </div>
     </div>
 

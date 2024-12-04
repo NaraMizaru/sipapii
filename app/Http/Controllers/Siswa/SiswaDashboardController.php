@@ -16,7 +16,7 @@ class SiswaDashboardController extends Controller
     {
         $data['siswa'] = Auth::user();
         $data['absen'] = Absen::where('siswa_id', Auth::user()->siswa->id)->where('tanggal', Carbon::now()->format('d-m-Y'))->first();
-        $data['jurnal'] = Jurnal::orderBy('created_at', 'desc')->where('siswa_id', Auth::user()->siswa->id)->limit(10)->get()->map(function ($jurnal) {
+        $data['jurnal'] = Jurnal::orderBy('created_at', 'desc')->where('siswa_id', Auth::user()->siswa->id)->limit(9)->get()->map(function ($jurnal) {
             $jurnal->tanggal = Carbon::parse($jurnal->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY');
             return $jurnal;
         });

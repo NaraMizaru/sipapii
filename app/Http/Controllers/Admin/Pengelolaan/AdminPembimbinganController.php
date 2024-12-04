@@ -106,7 +106,6 @@ class AdminPembimbinganController extends Controller
             $data->orderBy('created_at', 'desc');
         }
 
-
         $count = $data->count();
         $countFiltered = $count;
 
