@@ -47,7 +47,7 @@ class SiswaAbsenController extends Controller
       }
     }
 
-    return view('siswa.absen')->with($data);
+    return view('siswa.absen', [], ['menu_type' => 'absen'])->with($data);
   }
 
   public function absen(Request $request)
@@ -92,16 +92,18 @@ class SiswaAbsenController extends Controller
       $file = $request->camera_data;
 
       $image = ImageManager::gd()->read($file);
-      $image = $image->resize(480, 480);
+      $image = $image->resize(720, 720, function ($constraint) {
+        $constraint->aspectRatio();
+        $constraint->upsize();
+      });
 
       $storePath = 'absen/' . $siswaId . '/' . Carbon::now()->format('d-m-Y');
-      // $fileName = $file->hashName();
+      $fileName = $file->hashName();
 
-      // $storedPath = $image->save(storage_path('app/public/' . $storePath . '/' . $fileName));
-      // dd(Storage::url($storedPath));
+      $storedPath = $storePath . '/' . $fileName;
+      Storage::put($storedPath, (string) $image->encode());
 
-      $storedFile = $file->storeAs($storePath, $file->hashName());
-      $filePath = Storage::url($storedFile);
+      $filePath = Storage::url($storedPath);
 
       $input[$type == 'masuk' ? 'foto_masuk' : 'foto_pulang'] = $filePath;
     }

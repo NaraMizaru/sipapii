@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Pengelolaan\AdminTahunAjarController;
 use App\Http\Controllers\Admin\Siswa\AdminDataSiswaController;
 use App\Http\Controllers\Siswa\SiswaAbsenController;
 use App\Http\Controllers\Siswa\SiswaDashboardController;
+use App\Http\Controllers\Siswa\SiswaJurnalController;
 use App\Http\Controllers\Siswa\SiswaRiwayatController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -131,6 +132,12 @@ Route::prefix('/siswa')->middleware(['auth', 'role:siswa'])->group(function () {
         Route::prefix('/riwayat')->group(function () {
             Route::get('/', 'index')->name('siswa.riwayat');
             Route::get('/data', 'data')->name('siswa.riwayat.data');
+        });
+    });
+
+    Route::controller(SiswaJurnalController::class)->group(function () {
+        Route::prefix('/jurnal')->group(function () {
+            Route::get('/', 'index')->name('siswa.jurnal');
         });
     });
 });

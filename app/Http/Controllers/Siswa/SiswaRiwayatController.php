@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Siswa;
 use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use App\Models\Menempati;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,8 +27,16 @@ class SiswaRiwayatController extends Controller
         $order = $request->input('order');
 
         $siswaId = $request->query('siswa_id');
+        $tanggalAwal = $request->input('tanggal_awal');
+        $tanggalAkhir = $request->input('tanggal_akhir');
 
         $data = Absensi::query()->where('siswa_id', $siswaId)->with(['siswa']);
+
+        if ($tanggalAwal && $tanggalAkhir) {
+            $tanggalAwal = Carbon::createFromFormat('Y-m-d', $tanggalAwal)->format('d-m-Y');
+            $tanggalAkhir = Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->format('d-m-Y');
+            $data->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
+        }
 
         if (!empty($order)) {
             $order = $order[0];
@@ -48,7 +57,6 @@ class SiswaRiwayatController extends Controller
 
         if (!empty($search['value'])) {
             $data->where('tanggal', 'LIKE', '%' . $search['value'] . '%');
-                // ->orWhere('status', 'LIKE', '%' . $search['value'] . '%');
             $countFiltered = $data->count();
         }
 

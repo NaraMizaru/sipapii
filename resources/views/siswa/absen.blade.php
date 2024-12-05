@@ -328,17 +328,15 @@
                 }
             }
 
-            if (jurnal === '') {
+            if (jurnal === '' && new URLSearchParams(window.location.search).get('type') === 'pulang') {
                 Toastify({
                     text: "Jurnal tidak boleh kosong",
                     duration: 3000,
                     close: true,
                     backgroundColor: "#dc3545",
-                }).showToast()
+                }).showToast();
                 return;
             }
-
-            // $('#absenPulangModal form').submit();
         })
 
         const dataURItoFile = (dataURI, fileName) => {

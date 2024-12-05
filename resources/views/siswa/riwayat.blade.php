@@ -1,5 +1,5 @@
 @extends('layouts.app-2')
-@section('title', 'Siswa Dashboard')
+@section('title', 'Absensi Siswa')
 
 @push('css')
     {{-- CSS Only For This Page --}}
@@ -21,6 +21,20 @@
                         <h4 class="card-title">Riwayat Absensi</h4>
                     </div>
                     <div class="card-body">
+                        <div class="row mb-5">
+                            <div class="col-6">
+                                <label for="">Tanggal Awal</label>
+                                <input type="date" name="tanggal_awal" id="tanggalAwal" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="">Tanggal Akhir</label>
+                                <input type="date" name="tanggal_akhir" id="tanggalAkhir" class="form-control">
+                            </div>
+                            <div class="col-12 mt-2">
+                                <button class="btn btn-primary w-100" id="btnFilter"><i
+                                        class="fa-regular fa-filter me-2"></i>Filter</button>
+                            </div>
+                        </div>
                         <table class="table bordered w-100 nowrap" id="table-1">
                             <thead>
                                 <tr>
@@ -48,15 +62,15 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="previewImageModalTitle">Tambah Kelas</h5>
+                    <h5 class="modal-title" id="previewImageModalTitle">Preview Foto Absen</h5>
                 </div>
                 <div class="modal-body">
                     <div class="d-flex align-items-center justify-content-center">
-                        <img src="" alt="Image Preview" class="img-fluid rounded-lg" loading="lazy">
+                        <img src="" alt="Image Preview" class="img-fluid rounded-3" loading="lazy">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
                         <span>Tutup</span>
                     </button>
                 </div>
@@ -152,7 +166,8 @@
                 ajax: {
                     url: "{!! route('siswa.riwayat.data', ['siswa_id' => Auth::user()->siswa->id]) !!}",
                     data: function(e) {
-                        return e;
+                        e.tanggal_awal = $('#tanggalAwal').val();
+                        e.tanggal_akhir = $('#tanggalAkhir').val();
                     }
                 },
                 order: [
@@ -222,6 +237,12 @@
                     "lengthMenu": "_MENU_ ",
                 }
             });
+
+            $('#btnFilter').on('click', function() {
+                $('#table-1').DataTable().ajax.reload();
+            });
+
+
         });
     </script>
     <script>
@@ -234,8 +255,6 @@
             } else {
                 img.src = src;
             }
-
         }
     </script>
-    
 @endpush
