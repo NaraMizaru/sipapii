@@ -50,7 +50,7 @@ border-primary"
             <p class="fw-bold">Riwayat</p>
         </div>
     </a>
-    <a href="" class="row d-flex align-items-center justify-content-center text-center w-100 {{ @$menu_type == 'profile' ? 'nav-link' : '' }}"
+    <a href="{{ route('siswa.profile') }}" class="row d-flex align-items-center justify-content-center text-center w-100 {{ @$menu_type == 'profile' ? 'nav-link' : '' }}"
         style="height: 45px">
         <div class="col">
             <i class="fa-regular fa-user fs-4"></i>

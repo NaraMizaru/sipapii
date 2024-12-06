@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Siswa\AdminDataSiswaController;
 use App\Http\Controllers\Siswa\SiswaAbsenController;
 use App\Http\Controllers\Siswa\SiswaDashboardController;
 use App\Http\Controllers\Siswa\SiswaJurnalController;
+use App\Http\Controllers\Siswa\SiswaProfileController;
 use App\Http\Controllers\Siswa\SiswaRiwayatController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::fallback(function () {
+    return redirect()->route('login');
+});
+
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'index')->name('login');
@@ -138,6 +144,12 @@ Route::prefix('/siswa')->middleware(['auth', 'role:siswa'])->group(function () {
     Route::controller(SiswaJurnalController::class)->group(function () {
         Route::prefix('/jurnal')->group(function () {
             Route::get('/', 'index')->name('siswa.jurnal');
+        });
+    });
+
+    Route::controller(SiswaProfileController::class)->group(function () {
+        Route::prefix('/profile')->group(function () {
+            Route::get('/', 'index')->name('siswa.profile');
         });
     });
 });

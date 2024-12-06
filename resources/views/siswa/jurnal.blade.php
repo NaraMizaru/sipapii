@@ -9,7 +9,6 @@
 @section('content')
     <div class="px-4 py-4">
         <div class="row">
-            <!-- Filter Form -->
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -36,7 +35,6 @@
                 </div>
             </div>
 
-            <!-- Jurnal Data -->
             <div class="col-12">
                 <h4>Data Jurnal</h4>
                 <div class="row" id="jurnal-container">
@@ -82,7 +80,6 @@
                     @endforeach
                 </div>
                 <div class="mt-4 d-flex justify-content-center">
-                  {{-- @dd($jurnal->links()) --}}
                     {{ $jurnal->links() }}
                 </div>
             </div>

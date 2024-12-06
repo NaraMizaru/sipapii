@@ -148,8 +148,8 @@
             }
 
             $('#latitude').on('input', function() {
-                var lat = parseFloat($('#latitude').val());
-                var lon = parseFloat($('#longitude').val());
+                var lat = $('#latitude').val();
+                var lon = $('#longitude').val();
 
                 if (!isNaN(lat) && !isNaN(lon)) {
                     marker.setLatLng([lat, lon]);
@@ -158,8 +158,8 @@
             });
 
             $('#longitude').on('input', function() {
-                var lat = parseFloat($('#latitude').val());
-                var lon = parseFloat($('#longitude').val());
+                var lat = $('#latitude').val();
+                var lon = $('#longitude').val();
 
                 if (!isNaN(lat) && !isNaN(lon)) {
                     marker.setLatLng([lat, lon]);

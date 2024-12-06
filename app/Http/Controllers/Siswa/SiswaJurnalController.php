@@ -16,8 +16,8 @@ class SiswaJurnalController extends Controller
             ->where('siswa_id', Auth::user()->siswa->id);
 
         if ($request->has('tanggal_awal') && $request->has('tanggal_akhir')) {
-            $tanggalAwal = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
-            $tanggalAkhir = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
+            $tanggalAwal = Carbon::parse($request->tanggal_awal)->format('d-m-Y');
+            $tanggalAkhir = Carbon::parse($request->tanggal_akhir)->format('d-m-Y');
 
             $query->whereBetween('tanggal', [
                 $tanggalAwal,
