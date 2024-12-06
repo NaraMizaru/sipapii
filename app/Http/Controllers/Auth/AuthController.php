@@ -54,4 +54,29 @@ class AuthController extends Controller
         Auth::logout();
         return redirect()->route('login');
     }
+
+    public function changePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => 'required',
+            'password_confirmation' => 'required|same:new_password',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $user = User::where('id', Auth::user()->id)->first();
+
+        if ($request->old_password != $user->password) {
+            return redirect()->back()->with('error', 'Password lama tidak cocok');
+        }
+
+        Auth::logout();
+        $user->password = $request->new_password;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Password berhasil diubah');
+    }
 }

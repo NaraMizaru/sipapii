@@ -7,6 +7,7 @@ use App\Models\Jurnal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class SiswaJurnalController extends Controller
 {
@@ -33,5 +34,35 @@ class SiswaJurnalController extends Controller
         });
 
         return view('siswa.jurnal', [], ['menu_type' => 'jurnal'])->with($data);
+    }
+
+    public function editJurnal(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'deskripsi_jurnal' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+        }
+
+        $jurnal = Jurnal::where('id', $id)->where('siswa_id', Auth::user()->siswa->id)->first();
+        if ($jurnal->validasi == 'Divalidasi') {
+            return redirect()->back()->with('error', 'Jurnal sudah divalidasi');
+        } else if ($jurnal->validasi == 'Tidak Mengisi') {
+            return redirect()->back()->with('error', 'Anda tidak mengisi pada tangal ' . $jurnal->tanggal);
+        }
+
+        $jurnal->deskripsi_jurnal = $request->deskripsi_jurnal;
+        $jurnal->save();
+
+        return redirect()->back()->with('success', 'Jurnal berhasil diubah');
+    }
+
+    public function dataById($id)
+    {
+        $jurnal = Jurnal::find($id);
+
+        return response()->json($jurnal);
     }
 }

@@ -10,14 +10,20 @@
                 <a class="dropdown me-1" type="button" id="dropdownProfile" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <div class="avatar avatar-lg">
-                        <img src="{{ asset('assets/static/images/faces/1.jpg') }}" alt="">
+                        @if (auth()->user()->profile_picture == null)
+                            <img src="{{ asset('assets/static/images/faces/1.jpg') }}" alt="">
+                        @else
+                            <img src="{{ auth()->user()->profile_picture }}" alt="">
+                        @endif
                         <div class="avatar-status bg-success"></div>
                     </div>
                 </a>
                 <div class="dropdown-menu mt-3" aria-labelledby="dropdownProfile">
-                    <a class="dropdown-item" href="#">Profile</a>
-                    <a class="dropdown-item" href="#">Setting</a>
-                    <div class="dropdown-divider"></div>
+                    @if (auth()->user()->role != 'siswa')
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="#">Setting</a>
+                        <div class="dropdown-divider"></div>
+                    @endif
                     <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                 </div>
             </div>

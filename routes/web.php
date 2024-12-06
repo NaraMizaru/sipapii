@@ -31,6 +31,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login')->name('post.login');
 
     Route::get('/logout', 'logout')->name('logout')->middleware('auth');
+    Route::post('/change-password', 'changePassword')->name('password.change')->middleware('auth');
 });
 
 // Route Path Admin
@@ -144,12 +145,16 @@ Route::prefix('/siswa')->middleware(['auth', 'role:siswa'])->group(function () {
     Route::controller(SiswaJurnalController::class)->group(function () {
         Route::prefix('/jurnal')->group(function () {
             Route::get('/', 'index')->name('siswa.jurnal');
+            Route::post('/{id}/edit', 'editJurnal')->name('siswa.jurnal.edit');
+            Route::get('/data/{id}', 'dataById')->name('siswa.jurnal.data.id');
         });
     });
 
     Route::controller(SiswaProfileController::class)->group(function () {
         Route::prefix('/profile')->group(function () {
             Route::get('/', 'index')->name('siswa.profile');
+            Route::post('/email/add', 'addEmail')->name('siswa.profile.email.add');
+            Route::post('/picture/edit', 'changeProfile')->name('siswa.profile.picture.edit');
         });
     });
 });

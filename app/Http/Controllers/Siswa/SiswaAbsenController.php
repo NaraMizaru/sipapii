@@ -97,7 +97,9 @@ class SiswaAbsenController extends Controller
         $constraint->upsize();
       });
 
-      $storePath = 'absen/' . $siswaId . '/' . Carbon::now()->format('d-m-Y');
+      $tahunAjar = Auth::user()->siswa->tahunAjar->tahun_ajar;;
+
+      $storePath = str_replace('/', '-', $tahunAjar) . '/' . 'absen' . '/' . $siswaId . '/' . Carbon::now()->format('d-m-Y');
       $fileName = $file->hashName();
 
       $storedPath = $storePath . '/' . $fileName;
